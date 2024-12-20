@@ -51,9 +51,17 @@
                     ${course.isPaid ? `<p>السعر: ${course.price} ريال</p>` : ''}
                     <p>المقدم: ${course.instructor}</p>
                     <p>عدد الدروس: ${course.lessons}</p>
-                    <button class="${buttonClass}">${buttonText}</button>
+                    <button class="${buttonClass}" data-title="${course.title}">${buttonText}</button>
                 `;
                 courseContainer.appendChild(courseElement);
+            });
+
+            // إضافة مستمع للأزرار
+            document.querySelectorAll('.start').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const courseTitle = event.target.getAttribute('data-title');
+                    alert(`بدأت الآن دورة: ${courseTitle}`);
+                });
             });
         }
 
