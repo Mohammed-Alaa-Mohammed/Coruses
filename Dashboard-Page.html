@@ -71,6 +71,7 @@
     <script>
         // تحميل الكورسات من localStorage وعرضها
      // تحميل الكورسات
+    // تحميل الكورسات
 function loadCourses(filteredCourses = null) {
     const courses = filteredCourses || JSON.parse(localStorage.getItem('courses')) || [];
     const courseContainer = document.getElementById('courseList');
