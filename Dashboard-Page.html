@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="dash-page.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses Page</title>
+    <style>
+        /* أضف التنسيقات هنا إذا لزم الأمر */
+    </style>
+</head>
+<body class="light-mode">
+
+    <div class="header">
+        <h1>Courses</h1>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+    </div>
+
+    <!-- شريط البحث والفلترة -->
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="ابحث عن كورس..." oninput="filterCourses()">
+        <select id="filterSelect" onchange="filterCourses()"
+            style="width:190px;">
+            <option value="all">الكل</option>
+            <option value="free">مجاني</option>
+            <option value="paid">مدفوع</option>
+        </select>
+    </div>
+
+    <!-- قائمة الكورسات -->
+    <div class="course-container" id="courseList">
+        <!-- سيتم تحميل الكورسات ديناميكيًا هنا -->
+    </div>
+
+    <script>
+        // تحميل الكورسات من localStorage وعرضها
+        function loadCourses(filteredCourses = null) {
+            const courses = filteredCourses || JSON.parse(localStorage.getItem('courses')) || [];
+            const courseContainer = document.getElementById('courseList');
+            courseContainer.innerHTML = '';
+
+            courses.forEach((course, index) => {
+                const courseElement = document.createElement('div');
+                courseElement.classList.add('course');
+                const buttonText = course.isPaid ? 'إشترك الآن' : 'ابدأ الآن';
+                const buttonClass = course.isPaid ? 'subscribe' : 'start';
+
+                courseElement.innerHTML = `
+                    <h2>${course.title}</h2>
+                    <p>${course.description}</p>
+                    ${course.isPaid ? `<p>السعر: ${course.price} ريال</p>` : ''}
+                    <p>المقدم: ${course.instructor}</p>
+                    <p>عدد الدروس: ${course.lessons}</p>
+                    <button class="${buttonClass}">${buttonText}</button>
+                `;
+                courseContainer.appendChild(courseElement);
+            });
+        }
+
+        // فلترة الكورسات حسب البحث والاختيار
+        function filterCourses() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const filterSelect = document.getElementById('filterSelect').value;
+
+            const courses = JSON.parse(localStorage.getItem('courses')) || [];
+            const filteredCourses = courses.filter(course => {
+                const matchesSearch = course.title.toLowerCase().includes(searchInput) ||
+                                      course.description.toLowerCase().includes(searchInput);
+                const matchesFilter = 
+                    filterSelect === 'all' ||
+                    (filterSelect === 'free' && !course.isPaid) ||
+                    (filterSelect === 'paid' && course.isPaid);
+                return matchesSearch && matchesFilter;
+            });
+
+            loadCourses(filteredCourses);
+        }
+
+        // تغيير وضع الإضاءة والظلام
+        function toggleTheme() {
+            const body = document.body;
+            const currentMode = body.classList.contains('light-mode') ? 'light' : 'dark';
+            body.classList.remove(`${currentMode}-mode`);
+            body.classList.add(`${currentMode === 'light' ? 'dark' : 'light'}-mode`);
+            document.querySelector('.theme-toggle').textContent = currentMode === 'light' ? '☀️' : '🌙';
+        }
+
+        // تحميل الكورسات عند فتح الصفحة
+        window.onload = () => {
+            loadCourses();
+        };
+    </script>
+
+</body>
+</html>

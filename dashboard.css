@@ -1,0 +1,168 @@
+
+
+        /* تنسيق الصفحة بشكل عام */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            direction: rtl; /* لضبط الكتابة من اليمين لليسار */
+        }
+
+        .dashboard-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #2980b9;
+            text-align: center;
+        }
+
+        .course-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .course-form input, .course-form textarea, .course-form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .course-form button {
+            background-color: #2980b9;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .course-form button:hover {
+            background-color: #3498db;
+        }
+
+        /* تنسيق الأزرار 3D */
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        /* زر التعديل */
+        .edit-button {
+            background-color: #4CAF50; /* لون خلفية الزر */
+            margin-right: 10px; /* المسافة بين الزرين */
+        }
+
+        /* زر الحذف */
+        .delete-button {
+            background-color: #f44336; /* لون خلفية الزر */
+        }
+
+        /* التأثير عند التمرير */
+        .button:hover {
+            transform: translateY(-3px); /* رفع الزر قليلاً */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.08); /* تأثير الظل */
+        }
+
+        .button:active {
+            transform: translateY(2px); /* الزر ينضغط عند النقر */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.2); /* تأثير الظل أثناء النقر */
+        }
+
+        /* Media Queries: جعل الصفحة تستجيب لجميع أحجام الشاشات */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 10px;
+            }
+
+            .course-form input, .course-form textarea, .course-form select, .course-form button {
+                width: 100%;
+                padding: 8px;
+                font-size: 14px;
+            }
+
+            .button {
+                width: 48%; /* جعل الأزرار تأخذ عرض أقل قليلاً */
+                margin-bottom: 10px;
+            }
+
+            .edit-button {
+                margin-right: 2%;
+            }
+
+            /* تعديل التنسيق عند استخدام الشاشات الصغيرة */
+            .course-form {
+                padding: 15px;
+            }
+        }
+
+        /* Media Queries إضافية لمقاسات صغيرة جدا */
+        @media (max-width: 480px) {
+            .dashboard-container {
+                padding: 5px;
+            }
+
+            .course-form {
+                padding: 15px;
+            }
+
+            .button {
+                width: 100%;
+                margin-bottom: 10px;
+            										
+            }
+        }
+
+        /* تنسيق القائمة التي تحتوي على الدورات */
+        .course-list {
+            margin-top: 30px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        		direction: rtl;
+        }
+
+        .course-item:last-child {
+            border-bottom: none;
+        }
+
+        .course-item h3 {
+            margin: 0;
+            color: #2980b9;
+        }
+
+        .course-item .course-buttons {
+            display: flex;
+        }
+
+        .course-item .course-buttons button {
+            margin-left: 10px;
+        }
+
+
+/*===============*/
+
