@@ -72,29 +72,26 @@
         // تحميل الكورسات من localStorage وعرضها
      // تحميل الكورسات
     // تحميل الكورسات
+// دالة لتحميل الكورسات مع الفلترة والبحث
+// دالة لتحميل الكورسات
 function loadCourses(filteredCourses = null) {
     const courses = filteredCourses || JSON.parse(localStorage.getItem('courses')) || [];
     const courseContainer = document.getElementById('courseList');
     courseContainer.innerHTML = '';
 
-    courses.forEach((course, index) => {
-        const courseElement = document.createElement('div');
-        courseElement.classList.add('course');
-
-        // تحديد النص المطلوب للزر حسب حالة الكورس
+    courses.forEach((course) => {
         const buttonText = course.isPaid ? 'إشترك الآن' : 'ابدأ الآن';
         const buttonClass = course.isPaid ? 'subscribe' : 'start';
 
-        // جلب التاريخ المدخل من localStorage
         const courseAddedDate = localStorage.getItem('selectedDate');
 
-        // إضافة تصميم وتفاصيل الكورس
+        const courseElement = document.createElement('div');
+        courseElement.classList.add('course');
+
         courseElement.innerHTML = `
             <div class="course-header">
                 <h2>${course.title}</h2>
                 <p><strong>المقدم:</strong> ${course.instructor}</p>
-                
-                <!-- ربط تاريخ الإضافة المدخل -->
                 <p><strong>تاريخ الإضافة:</strong> ${courseAddedDate ? new Date(courseAddedDate).toLocaleDateString() : 'لم يتم تحديد التاريخ'}</p>
             </div>
 
@@ -105,78 +102,36 @@ function loadCourses(filteredCourses = null) {
             </div>
 
             <div class="course-footer">
-                <button class="${buttonClass}" data-title="${course.title}" data-link="${course.link}" data-bs-toggle="modal" data-bs-target="#courseModal">${buttonText}</button>
+                <button class="${buttonClass}" data-title="${course.title}" data-link="${course.link}">${buttonText}</button>
             </div>
         `;
 
         courseContainer.appendChild(courseElement);
     });
 
-    // إضافة مستمع للأزرار "ابدأ الآن"
+    addEventListeners();
+}
+
+// دالة لإضافة مستمعين للأزرار
+function addEventListeners() {
     document.querySelectorAll('.start').forEach(button => {
         button.addEventListener('click', (event) => {
             const courseLink = event.target.getAttribute('data-link');
-            showCourseModal(courseLink); // عرض النافذة المنبثقة لتأكيد التشغيل
+            openCourseInNewWindow(courseLink); // فتح الرابط مباشرة
+            showAlert('تم بدء تشغيل الكورس بنجاح!'); // عرض رسالة تنبيه
         });
     });
 
-    // إضافة مستمع للأزرار "إشترك الآن"
     document.querySelectorAll('.subscribe').forEach(button => {
         button.addEventListener('click', (event) => {
             const courseLink = event.target.getAttribute('data-link');
-            openCourseInNewWindow(courseLink); // فتح الكورس مباشرة في نافذة جديدة
+            openCourseInNewWindow(courseLink); // فتح الرابط مباشرة
+            showAlert('تم الاشتراك في الكورس بنجاح!'); // عرض رسالة تنبيه
         });
     });
 }
 
-// دالة لفتح النافذة المنبثقة لتأكيد التشغيل
-function showCourseModal(courseLink) {
-    const modal = document.createElement('div');
-    modal.classList.add('modal', 'fade');
-    modal.setAttribute('tabindex', '-1');
-    modal.setAttribute('aria-labelledby', 'confirmationModalLabel');
-    modal.setAttribute('aria-hidden', 'true');
-
-    // تصميم النافذة
-    modal.innerHTML = `
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmationModalLabel">تأكيد</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>هل أنت متأكد أنك تريد مشاهدة هذا الكورس؟</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="button" class="btn btn-primary" id="confirmButton">مشاهدة الكورس</button>
-                </div>
-            </div>
-        </div>
-    `;
-
-    document.body.appendChild(modal);
-
-    // تهيئة النافذة
-    const modalInstance = new bootstrap.Modal(modal);
-    modalInstance.show();
-
-    // عند الضغط على زر "مشاهدة الكورس"
-    document.getElementById('confirmButton').addEventListener('click', () => {
-        openCourseInNewWindow(courseLink); // فتح الرابط في نافذة جديدة
-        modalInstance.hide(); // إغلاق النافذة بعد الموافقة
-        modal.remove(); // إزالة النافذة
-    });
-
-    // إغلاق النافذة عند الضغط على زر الإغلاق
-    modal.querySelector('.btn-close').addEventListener('click', () => {
-        modalInstance.hide();
-        modal.remove();
-    });
-}
-
-// دالة فتح الرابط في نافذة جديدة
+// دالة لفتح الرابط في نافذة جديدة
 function openCourseInNewWindow(courseLink) {
     if (courseLink) {
         window.open(courseLink, '_blank'); // فتح الرابط في نافذة جديدة
@@ -184,6 +139,65 @@ function openCourseInNewWindow(courseLink) {
         alert('رابط الكورس غير متوفر!');
     }
 }
+
+// دالة لعرض رسالة التنبيه باستخدام Toast من Bootstrap
+function showAlert(message) {
+    const toastContainer = document.getElementById('toastContainer');
+    
+    // إنشاء عنصر Toast جديد
+    const toastElement = document.createElement('div');
+    toastElement.classList.add('toast');
+    toastElement.setAttribute('role', 'alert');
+    toastElement.setAttribute('aria-live', 'assertive');
+    toastElement.setAttribute('aria-atomic', 'true');
+    
+    toastElement.innerHTML = `
+        <div class="toast-header">
+            <strong class="me-auto">تنبيه</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            ${message}
+        </div>
+    `;
+    
+    // إضافة العنصر إلى الحاوية
+    toastContainer.appendChild(toastElement);
+    
+    // تفعيل الـ Toast
+    const toast = new bootstrap.Toast(toastElement);
+    toast.show();
+
+    // إزالة الـ Toast بعد 3 ثوانٍ
+    setTimeout(() => {
+        toastElement.remove();
+    }, 3000);
+}
+
+// دالة للبحث والتصفية
+function filterCourses() {
+    const searchInput = document.getElementById('searchInput').value.toLowerCase();
+    const filterValue = document.getElementById('filterSelect').value;
+
+    const courses = JSON.parse(localStorage.getItem('courses')) || [];
+
+    const filteredCourses = courses.filter(course => {
+        const matchesSearch = course.title.toLowerCase().includes(searchInput) || course.instructor.toLowerCase().includes(searchInput);
+
+        const matchesFilter = filterValue === 'all' || (filterValue === 'free' && !course.isPaid) || (filterValue === 'paid' && course.isPaid);
+
+        return matchesSearch && matchesFilter;
+    });
+
+    loadCourses(filteredCourses);
+}
+
+// تحميل الكورسات عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+    loadCourses();
+});
+    
+    
 
         // تغيير وضع الإضاءة والظلام
         function toggleTheme() {
